@@ -1,0 +1,131 @@
+newman
+
+lab05
+
+❏ T1 Happy path: амжилттай бүртгэл
+↳ New Request
+  PUT http://localhost:3000/students/S01 [200 OK, 178B, 23ms]
+
+↳ New Request
+  PUT http://localhost:3000/courses/C01 [200 OK, 178B, 4ms]
+
+↳ New Request
+  POST http://localhost:3000/registrations [201 Created, 203B, 6ms]
+  1. Статус 201
+  ✓  result = OK ба registrationID тоо
+
+❏ Идэвхгүй оюутан бүртгэх
+↳ Оюутныг идэвхгүй төлөвтэйгээр үүсгэх
+  PUT http://localhost:3000/students/S03 [200 OK, 178B, 4ms]
+
+↳ Хичээлийг үүсгэх
+  PUT http://localhost:3000/courses/C03 [200 OK, 178B, 5ms]
+
+↳ Бүртгүүлэх хүсэлт явуулах
+  POST http://localhost:3000/registrations [200 OK, 198B, 3ms]
+  ✓  Status code is 200
+  ✓  Result is ERROR_INACTIVE_STUDENT
+
+❏ Оюутан байхгүй
+↳ New Request
+  PUT http://localhost:3000/courses/C02 [200 OK, 178B, 2ms]
+
+↳ New Request
+  POST http://localhost:3000/registrations [200 OK, 192B, 3ms]
+  ✓  Статус 200
+  ✓  result = ERROR_NO_STUDENT
+
+❏ Хичээл байхгүй
+↳ New Request
+  PUT http://localhost:3000/students/S04 [200 OK, 178B, 2ms]
+
+↳ New Request
+  POST http://localhost:3000/registrations [200 OK, 191B, 3ms]
+  ✓  Status code is 200
+  ✓  Result is ERROR_NO_COURSE
+
+❏ Холбоос хичээл үзээгүй
+↳ New Request
+  PUT http://localhost:3000/students/S05 [200 OK, 178B, 3ms]
+
+↳ New Request
+  PUT http://localhost:3000/courses/C05 [200 OK, 178B, 5ms]
+
+↳ New Request
+  POST http://localhost:3000/registrations [200 OK, 215B, 9ms]
+  ✓  Status code is 200
+  ✓  Result is ERROR_PREREQUISITES
+
+❏ оюутан ба хичээл хоёулаа байхгүй
+↳ New Request
+  POST http://localhost:3000/registrations [200 OK, 192B, 2ms]
+  ✓  Status code is 200
+  ✓  Result is ERROR_NO_STUDENT
+
+❏ идэвхгүй + холбоос дутуу
+↳ New Request
+  PUT http://localhost:3000/students/S07 [200 OK, 178B, 4ms]
+
+↳ New Request
+  PUT http://localhost:3000/courses/C07 [200 OK, 178B, 5ms]
+
+↳ New Request
+  POST http://localhost:3000/registrations [200 OK, 198B, 2ms]
+  ✓  Status code is 200
+  ✓  Result is ERROR_INACTIVE_STUDENT
+
+❏ Холбоосгүй хичээл
+↳ New Request
+  PUT http://localhost:3000/students/S08 [200 OK, 178B, 3ms]
+
+↳ New Request
+  PUT http://localhost:3000/courses/C08 [200 OK, 178B, 3ms]
+
+↳ New Request
+  POST http://localhost:3000/registrations [201 Created, 203B, 2ms]
+  ✓  Status code is 201
+  ✓  Result is OK and registrationID exists
+
+❏ courseID дутуу
+↳ New Request
+  POST http://localhost:3000/registrations [400 Bad Request, 202B, 2ms]
+  ✓  Status code is 400
+  ✓  Result is ERROR_BAD_REQUEST
+
+→ New Request
+  PUT localhost:3000/students/B231234567 [200 OK, 178B, 3ms]
+
+→ New Request
+  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 3ms]
+
+→ New Request
+  POST http://localhost:3000/registrations [201 Created, 203B, 4ms]
+  ✓  Статус 201
+  ✓  result = OK
+
+┌─────────────────────────┬─────────────────┬─────────────────┐
+│                         │        executed │          failed │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│              iterations │               1 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│                requests │              24 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│            test-scripts │              10 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│      prerequest-scripts │               0 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│              assertions │              20 │               1 │
+├─────────────────────────┴─────────────────┴─────────────────┤
+│ total run duration: 483ms                                   │
+├─────────────────────────────────────────────────────────────┤
+│ total data received: 553B (approx)                          │
+├─────────────────────────────────────────────────────────────┤
+│ average response time: 4ms [min: 2ms, max: 23ms, s.d.: 4ms] │
+└─────────────────────────────────────────────────────────────┘
+
+[31m  # [39m[31m failure        [39m[31m detail                                                  [39m
+[90m    [39m[90m                [39m[90m                                                         [39m
+ 1.  AssertionError  Статус 201                                              
+                     expected response to have status code 200 but got 201   
+                     at assertion:0 in test-script                           
+                     inside "T1 Happy path: амжилттай бүртгэл / New Request" 
